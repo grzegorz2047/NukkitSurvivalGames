@@ -18,12 +18,12 @@ public class SurvivalGames extends PluginBase {
 
     @Override
     public void onLoad() {
-        this.getLogger().info(TextFormat.WHITE + "I've been loaded!");
+        this.getLogger().info(TextFormat.WHITE + "onLoad!");
     }
 
     @Override
     public void onEnable() {
-        this.getLogger().info(TextFormat.DARK_GREEN + "I've been enabled!");
+        this.getLogger().info(TextFormat.DARK_GREEN + " enabled");
 
         this.getLogger().info(String.valueOf(this.getDataFolder().mkdirs()));
 

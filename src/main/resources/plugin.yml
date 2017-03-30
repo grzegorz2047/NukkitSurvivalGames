@@ -1,0 +1,5 @@
+name: SurvivalGames
+version: "0.0.1"
+main: pl.grzegorz2047.nukkitsurvivalgames.SurvivalGames
+api: ["1.0.0"]
+author: grzegorz2047
