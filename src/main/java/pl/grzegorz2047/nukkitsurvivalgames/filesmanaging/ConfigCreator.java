@@ -11,15 +11,15 @@ public class ConfigCreator {
 
     private Config config;
 
-    public ConfigCreator(String path, String name) {
-        config = createConfig(path, name);
+    public ConfigCreator(String path, String name, int type) {
+        config = createConfig(path, name, type);
     }
 
-    private Config createConfig(String path, String name) {
+    private Config createConfig(String path, String name, int type) {
         new File(path).mkdirs();
-        File file = new File(path, name);
+        File file = new File(path, name + ".yml");
         //System.out.println("cc file: "+ file.getName() + "  pat "+ file.getAbsolutePath());
-        Config config = new Config(file, Config.YAML);
+        Config config = new Config(file, type);
         config.save();
         return config;
     }

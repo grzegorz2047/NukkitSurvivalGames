@@ -1,6 +1,7 @@
 package pl.grzegorz2047.nukkitsurvivalgames.filesmanaging;
 
 
+import cn.nukkit.utils.Config;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -25,8 +26,9 @@ public class ConfigCreatorTest {
         String name = temp.getName().replaceAll(".yml", "");
         //System.out.println("Abs name: " + name);
 
-        ConfigCreator configCreator = new ConfigCreator(path, name);
+        ConfigCreator configCreator = new ConfigCreator(path, name, Config.YAML);
         assertNotNull(configCreator.getConfig());
+        temp.delete();
     }
 
 }

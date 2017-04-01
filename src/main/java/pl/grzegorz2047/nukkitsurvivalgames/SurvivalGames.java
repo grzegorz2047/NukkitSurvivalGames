@@ -7,6 +7,9 @@ import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.plugin.PluginManager;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
+import pl.grzegorz2047.nukkitsurvivalgames.commands.ChatCommand;
+import pl.grzegorz2047.nukkitsurvivalgames.commands.CommandController;
+import pl.grzegorz2047.nukkitsurvivalgames.commands.spawnpoint.SpawnPointCommand;
 import pl.grzegorz2047.nukkitsurvivalgames.filesmanaging.ConfigCreator;
 import pl.grzegorz2047.nukkitsurvivalgames.listeners.ServerCommandListener;
 import pl.grzegorz2047.nukkitsurvivalgames.tasks.BroadcastTask;
@@ -18,6 +21,7 @@ public class SurvivalGames extends PluginBase {
 
 
     private Server server;
+    private CommandController commandController;
 
     public static void msg(String msg) {
         Server.getInstance().getLogger().info(msg);
@@ -31,19 +35,31 @@ public class SurvivalGames extends PluginBase {
     @Override
     public void onEnable() {
         server = this.getServer();
-        msg(TextFormat.DARK_GREEN + " enabled!");
-
-//        msg(String.valueOf());
-
-        //PluginTask
-        server.getScheduler().scheduleRepeatingTask(new BroadcastTask(this), 200);
-        Config config = new ConfigCreator(this.getDataFolder().getPath(), "config").getConfig();
-        config.set("welcomeMsg", "Hi!");
-        config.save();
-
-        if(config.exists("welcomeMsg")) {
+        createThreads();
+        Config config = createConfig();
+        if (config.exists("welcomeMsg")) {
             System.out.println("DZIALA config!");
         }
+
+        registerEvents();
+        registerCommands();
+        msg(TextFormat.DARK_GREEN + " enabled!");
+    }
+
+    private void createThreads() {
+        server.getScheduler().scheduleRepeatingTask(new BroadcastTask(this), 200);
+    }
+
+    private void registerCommands() {
+        commandController = new CommandController();
+        commandController.registerCommand(new SpawnPointCommand("spawnpoint"), server.getCommandMap());
+    }
+
+    private Config createConfig() {
+        Config config = new ConfigCreator(this.getDataFolder().getPath(), "config", Config.YAML).getConfig();
+        config.set("welcomeMsg", "Hi!");
+        config.save();
+        return config;
     }
 
     private void registerEvents() {
@@ -51,19 +67,15 @@ public class SurvivalGames extends PluginBase {
         pm.registerEvents(new ServerCommandListener(this), this);
     }
 
+    @Override
+    public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
+        commandController.passCommand(command.getName(), commandSender, label, args);
+        return true;
+    }
 
     @Override
     public void onDisable() {
         msg(TextFormat.DARK_GREEN + " disabled!");
-    }
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        switch (command.getName()) {
-            case "example":
-
-        }
-        return true;
     }
 
 }
