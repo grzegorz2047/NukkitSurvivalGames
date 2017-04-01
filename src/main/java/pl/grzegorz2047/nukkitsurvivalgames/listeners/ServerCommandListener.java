@@ -16,7 +16,7 @@ public class ServerCommandListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.NORMAL) //DON'T FORGET THE ANNOTATION @EventHandler
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onServerCommand(ServerCommandEvent e) {
         this.plugin.getLogger().info("ServerCommandEvent is called!");
         //you can do more here!

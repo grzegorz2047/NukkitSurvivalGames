@@ -1,20 +1,27 @@
 package pl.grzegorz2047.nukkitsurvivalgames;
 
+import cn.nukkit.Server;
 import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.plugin.PluginBase;
+import cn.nukkit.plugin.PluginManager;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
+import pl.grzegorz2047.nukkitsurvivalgames.filesmanaging.ConfigCreator;
 import pl.grzegorz2047.nukkitsurvivalgames.listeners.ServerCommandListener;
 import pl.grzegorz2047.nukkitsurvivalgames.tasks.BroadcastTask;
-
-import java.io.File;
-import java.util.LinkedHashMap;
 
 /**
  * Plik stworzony przez grzegorz2047 26.03.2017.
  */
 public class SurvivalGames extends PluginBase {
+
+
+    private Server server;
+
+    public static void msg(String msg) {
+        Server.getInstance().getLogger().info(msg);
+    }
 
     @Override
     public void onLoad() {
@@ -23,38 +30,31 @@ public class SurvivalGames extends PluginBase {
 
     @Override
     public void onEnable() {
-        this.getLogger().info(TextFormat.DARK_GREEN + " enabled");
+        server = this.getServer();
+        msg(TextFormat.DARK_GREEN + " enabled!");
 
-        this.getLogger().info(String.valueOf(this.getDataFolder().mkdirs()));
-
-        //Register the EventListener
-        this.getServer().getPluginManager().registerEvents(new ServerCommandListener(this), this);
+//        msg(String.valueOf());
 
         //PluginTask
-        this.getServer().getScheduler().scheduleRepeatingTask(new BroadcastTask(this), 200);
-
-        //Save resources
-
-        //Config reading and writing
-        Config config = new Config(
-                new File(this.getDataFolder(), "config.yml"),
-                Config.YAML,
-                //Default values (not necessary)
-                new LinkedHashMap<String, Object>() {
-                    {
-                        put("this-is-a-key", "Hello! Config!");
-                        put("another-key", true); //you can also put other standard objects!
-                    }
-                });
-        //Now try to get the value, the default value will be given if the key isn't exist!
-        this.getLogger().info(String.valueOf(config.get("this-is-a-key", "this-is-default-value")));
-        //Don't forget to save it!
+        server.getScheduler().scheduleRepeatingTask(new BroadcastTask(this), 200);
+        Config config = new ConfigCreator(this.getDataFolder().getPath(), "config").getConfig();
+        config.set("welcomeMsg", "Hi!");
         config.save();
+
+        if(config.exists("welcomeMsg")) {
+            System.out.println("DZIALA config!");
+        }
     }
+
+    private void registerEvents() {
+        PluginManager pm = server.getPluginManager();
+        pm.registerEvents(new ServerCommandListener(this), this);
+    }
+
 
     @Override
     public void onDisable() {
-        this.getLogger().info(TextFormat.DARK_RED + "I've been disabled!");
+        msg(TextFormat.DARK_GREEN + " disabled!");
     }
 
     @Override
