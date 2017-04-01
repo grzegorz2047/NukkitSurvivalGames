@@ -1,2 +1,6 @@
 couldntAddSpawnPointToArena: 'Couldnt add spawnpoint to arena'
 messageOnlyForPlayerOnServer: 'You can execute this command only on server!'
+wrongnumberofarguments: 'Wrong number of arguments!'
+argumentdoesntexists: 'This argument doesnt exists!'
+arenaHasBeenCreated: 'Arena has been created!'
+arenaAlreadyExists: 'Arena already exists!'

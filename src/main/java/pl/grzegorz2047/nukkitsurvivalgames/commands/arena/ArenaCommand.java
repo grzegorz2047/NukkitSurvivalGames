@@ -1,21 +1,22 @@
-package pl.grzegorz2047.nukkitsurvivalgames.commands.spawnpoint;
+package pl.grzegorz2047.nukkitsurvivalgames.commands.arena;
 
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.level.Location;
 import pl.grzegorz2047.nukkitsurvivalgames.SurvivalGames;
 import pl.grzegorz2047.nukkitsurvivalgames.arena.ArenaManager;
+import pl.grzegorz2047.nukkitsurvivalgames.arena.exceptions.ArenaAlreadyExistsException;
 import pl.grzegorz2047.nukkitsurvivalgames.commands.ChatCommand;
 import pl.grzegorz2047.nukkitsurvivalgames.messages.Messages;
 
 /**
  * Plik stworzony przez grzegorz2047 01.04.2017.
  */
-public class SpawnPointCommand extends ChatCommand {
+public class ArenaCommand extends ChatCommand {
 
     private final ArenaManager arenaManager;
 
-    public SpawnPointCommand(String name, ArenaManager arenaManager) {
+    public ArenaCommand(String name, ArenaManager arenaManager) {
         super(name);
         this.arenaManager = arenaManager;
     }
@@ -27,25 +28,25 @@ public class SpawnPointCommand extends ChatCommand {
             return true;
         }
         Player p = (Player) sender;
-        Location loc = p.getLocation();
         if (args.length >= 2) {
-            String arenaname = args[0];
-            String param = args[1];
-            if (param.equals("next")) {
-                if (arenaManager.addSpawnPointToArena(loc, arenaname)) {
+            String param = args[0];
+            String arenaName = args[1];
+            int maxPlayers = Integer.parseInt(args[2]);
+
+            if (param.equals("add")) {
+                Location location = p.getPlayer().getLocation();
+                if (args.length != 3) {
+                    p.sendMessage(Messages.get("wrongnumberofarguments"));
                     return true;
-                } else {
-                    p.sendMessage(Messages.get("couldntAddSpawnPointToArena"));
                 }
-            } else {
-                p.sendMessage(Messages.get("argumentdoesntexists"));
-
+                try {
+                    arenaManager.addArena(arenaName, maxPlayers, location);
+                    p.sendMessage(Messages.get("arenaHasBeenCreated"));
+                } catch (ArenaAlreadyExistsException e) {
+                    p.sendMessage(Messages.get("arenaAlreadyExists"));
+                }
             }
-        } else {
-            p.sendMessage(Messages.get("wrongnumberofarguments"));
-
         }
         return true;
     }
-
 }

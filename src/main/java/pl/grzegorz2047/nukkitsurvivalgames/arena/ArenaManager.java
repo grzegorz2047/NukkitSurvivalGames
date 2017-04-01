@@ -2,6 +2,7 @@ package pl.grzegorz2047.nukkitsurvivalgames.arena;
 
 import cn.nukkit.Player;
 import cn.nukkit.level.Location;
+import pl.grzegorz2047.nukkitsurvivalgames.arena.exceptions.ArenaAlreadyExistsException;
 import pl.grzegorz2047.nukkitsurvivalgames.arena.exceptions.ArenaDoesntExistsException;
 
 import java.util.HashMap;
@@ -27,9 +28,19 @@ public class ArenaManager {
         try {
             arena = getArenaByName(arenaname);
         } catch (ArenaDoesntExistsException e) {
-            return true;
+            return false;
         }
         arena.addSpawnPoint(loc);
-        return false;
+        return true;
+    }
+
+    public Arena addArena(String name, int maxPlayers, Location location) throws ArenaAlreadyExistsException {
+        Arena arena = new Arena(name, maxPlayers, location);
+        try {
+            getArenaByName(name.toLowerCase());
+        } catch (ArenaDoesntExistsException e) {
+            throw new ArenaAlreadyExistsException("Arena " + name + " already exists!");
+        }
+        return arenas.put(name, arena);
     }
 }

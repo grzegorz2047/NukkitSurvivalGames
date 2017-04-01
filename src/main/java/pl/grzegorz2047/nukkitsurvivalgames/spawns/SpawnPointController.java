@@ -48,4 +48,11 @@ public class SpawnPointController {
         }
         return false;
     }
+
+    public void resetAssignedSpawnPoints() {
+        for (SpawnPoint sp : spawnPoints) {
+            sp.setFree(true);
+        }
+    }
+
 }
