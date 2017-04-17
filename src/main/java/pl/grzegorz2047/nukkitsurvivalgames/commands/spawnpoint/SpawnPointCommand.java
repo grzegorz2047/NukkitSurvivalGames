@@ -33,6 +33,7 @@ public class SpawnPointCommand extends ChatCommand {
             String param = args[1];
             if (param.equals("next")) {
                 if (arenaManager.addSpawnPointToArena(loc, arenaname)) {
+                    p.sendMessage(Messages.get("addedSpawnPointToArena"));
                     return true;
                 } else {
                     p.sendMessage(Messages.get("couldntAddSpawnPointToArena"));

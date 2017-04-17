@@ -28,17 +28,21 @@ public class ArenaCommand extends ChatCommand {
             return true;
         }
         Player p = (Player) sender;
+        if (args.length == 0) {
+            SurvivalGames.msg(Messages.get("arenaCommandUsage"));
+            return true;
+        }
         if (args.length >= 2) {
             String param = args[0];
-            String arenaName = args[1];
-            int maxPlayers = Integer.parseInt(args[2]);
-
-            if (param.equals("add")) {
+            if (param.equals("create")) {
                 Location location = p.getPlayer().getLocation();
                 if (args.length != 3) {
                     p.sendMessage(Messages.get("wrongnumberofarguments"));
                     return true;
                 }
+
+                String arenaName = args[1];
+                int maxPlayers = Integer.parseInt(args[2]);
                 try {
                     arenaManager.addArena(arenaName, maxPlayers, location);
                     p.sendMessage(Messages.get("arenaHasBeenCreated"));

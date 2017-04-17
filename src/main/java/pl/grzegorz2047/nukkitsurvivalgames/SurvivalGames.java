@@ -10,6 +10,7 @@ import cn.nukkit.utils.TextFormat;
 import pl.grzegorz2047.nukkitsurvivalgames.arena.ArenaManager;
 import pl.grzegorz2047.nukkitsurvivalgames.commands.ChatCommand;
 import pl.grzegorz2047.nukkitsurvivalgames.commands.CommandController;
+import pl.grzegorz2047.nukkitsurvivalgames.commands.arena.ArenaCommand;
 import pl.grzegorz2047.nukkitsurvivalgames.commands.spawnpoint.SpawnPointCommand;
 import pl.grzegorz2047.nukkitsurvivalgames.filesmanaging.ConfigCreator;
 import pl.grzegorz2047.nukkitsurvivalgames.listeners.ServerCommandListener;
@@ -57,6 +58,7 @@ public class SurvivalGames extends PluginBase {
     private void registerCommands() {
         commandController = new CommandController();
         commandController.registerCommand(new SpawnPointCommand("spawnpoint", arenaManager), server.getCommandMap());
+        commandController.registerCommand(new ArenaCommand("arena", arenaManager), server.getCommandMap());
     }
 
     private Config createConfig() {

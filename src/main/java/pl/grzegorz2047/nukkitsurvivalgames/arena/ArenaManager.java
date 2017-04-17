@@ -15,7 +15,7 @@ public class ArenaManager {
     private HashMap<String, Arena> arenas = new HashMap<>();
 
     public Arena getArenaByName(String arenaname) throws ArenaDoesntExistsException {
-        Arena arena = arenas.get(arenaname);
+        Arena arena = arenas.get(arenaname.toLowerCase());
         if (arena != null) {
             return arena;
         }
@@ -26,7 +26,7 @@ public class ArenaManager {
     public boolean addSpawnPointToArena(Location loc, String arenaname) {
         Arena arena;
         try {
-            arena = getArenaByName(arenaname);
+            arena = getArenaByName(arenaname.toLowerCase());
         } catch (ArenaDoesntExistsException e) {
             return false;
         }
@@ -35,12 +35,20 @@ public class ArenaManager {
     }
 
     public Arena addArena(String name, int maxPlayers, Location location) throws ArenaAlreadyExistsException {
-        Arena arena = new Arena(name, maxPlayers, location);
+        Arena arena;
+        String arenaName = name.toLowerCase();
         try {
-            getArenaByName(name.toLowerCase());
+            arena = getArenaByName(arenaName);
+            if (arena != null) {
+                throw new ArenaAlreadyExistsException("Arena " + arenaName + " already exists!");
+            }
+
+            System.out.println("Arena istnieje");
         } catch (ArenaDoesntExistsException e) {
-            throw new ArenaAlreadyExistsException("Arena " + name + " already exists!");
+            System.out.println("Arena nie istnieje");
+            arena = new Arena(arenaName, maxPlayers, location);
         }
-        return arenas.put(name, arena);
+        arenas.put(arenaName, arena);
+        return arena;
     }
 }

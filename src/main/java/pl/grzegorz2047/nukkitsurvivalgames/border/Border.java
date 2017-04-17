@@ -18,8 +18,11 @@ public class Border {
 
     }
 
-    public boolean isInBound(Location loc) {
+    public boolean isInBounds(Location loc) {
         return location.distance(loc) <= radius;
     }
 
+    public Location getCenter() {
+        return location;
+    }
 }
