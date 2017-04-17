@@ -1,6 +1,7 @@
 package pl.grzegorz2047.nukkitsurvivalgames.spawns;
 
 import cn.nukkit.level.Location;
+import pl.grzegorz2047.nukkitsurvivalgames.arena.exceptions.PlayerIsntAssignedToSpawnPointException;
 import pl.grzegorz2047.nukkitsurvivalgames.spawns.exceptions.NoFreeSpawnPointAvailable;
 
 import java.util.ArrayList;
@@ -13,8 +14,8 @@ public class SpawnPointController {
 
     private List<SpawnPoint> spawnPoints = new ArrayList<>();
 
-    public void addSpawnPoint(Location loc) {
-        SpawnPoint sp = new SpawnPoint(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch(), loc.getLevel().getName());
+    public void addSpawnPoint(Location loc, String mapName) {
+        SpawnPoint sp = new SpawnPoint(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch(), mapName);
         spawnPoints.add(sp);
     }
 
@@ -55,4 +56,12 @@ public class SpawnPointController {
         }
     }
 
+    public SpawnPoint getSpawnPointOccupiedByPlayer(String name) throws PlayerIsntAssignedToSpawnPointException {
+        for (SpawnPoint sp : spawnPoints) {
+            if (sp.getOccupiedBy().equals(name)) {
+                return sp;
+            }
+        }
+        throw new PlayerIsntAssignedToSpawnPointException("Player {0} is not assigned to any spawnpoint!".replace("{0}", name));
+    }
 }

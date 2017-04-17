@@ -1,7 +1,9 @@
 package pl.grzegorz2047.nukkitsurvivalgames.arena;
 
 import cn.nukkit.level.Location;
+import pl.grzegorz2047.nukkitsurvivalgames.arena.exceptions.PlayerIsntAssignedToSpawnPointException;
 import pl.grzegorz2047.nukkitsurvivalgames.border.Border;
+import pl.grzegorz2047.nukkitsurvivalgames.spawns.SpawnPoint;
 import pl.grzegorz2047.nukkitsurvivalgames.spawns.SpawnPointController;
 
 /**
@@ -14,6 +16,7 @@ public class Arena {
     private int maxPlayers = 10;
     private boolean allowSpectators = true;
     private Border border;
+    private boolean enabled = false;
 
     public Arena(String name, int maxPlayers, Location location) {
         this.arenaName = name;
@@ -21,8 +24,8 @@ public class Arena {
         this.border = new Border(location, Integer.MAX_VALUE);
     }
 
-    public void addSpawnPoint(Location loc) {
-        spawnPointController.addSpawnPoint(loc);
+    public void addSpawnPoint(Location loc, String mapName) {
+        spawnPointController.addSpawnPoint(loc, mapName);
     }
 
     public int getMaxPlayers() {
@@ -45,5 +48,11 @@ public class Arena {
         return border;
     }
 
+    public boolean assignPlayerToSpawnPoint(String playerName) {
+        return this.spawnPointController.assignPlayerToSpawnPoint(playerName);
+    }
 
+    public SpawnPoint getSpawnPointOccupiedByPlayer(String name) throws PlayerIsntAssignedToSpawnPointException {
+        return this.spawnPointController.getSpawnPointOccupiedByPlayer(name);
+    }
 }

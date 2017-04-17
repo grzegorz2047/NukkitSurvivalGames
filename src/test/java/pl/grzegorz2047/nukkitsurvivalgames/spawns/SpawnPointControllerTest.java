@@ -23,8 +23,8 @@ public class SpawnPointControllerTest {
         Location loc1 = new Location(0, 0, 0, l);
         Location loc2 = new Location(2, 2, 3, l);
 
-        spawnPointController.addSpawnPoint(loc1);
-        spawnPointController.addSpawnPoint(loc2);
+        spawnPointController.addSpawnPoint(loc1, "TestMap");
+        spawnPointController.addSpawnPoint(loc2, "TestMap");
 
         when(loc1.getLevel().getName()).thenReturn("TestWorld");
         when(loc2.getLevel().getName()).thenReturn("TestWorld");
@@ -45,14 +45,14 @@ public class SpawnPointControllerTest {
         when(loc1.getLevel().getName()).thenReturn("TestWorld");
         when(loc2.getLevel().getName()).thenReturn("TestWorld");
 
-        spawnPointController.addSpawnPoint(loc1);
+        spawnPointController.addSpawnPoint(loc1, "TestMap");
 
         assertTrue(spawnPointController.isThereAnyFreeSpawnPoint());
 
         spawnPointController.assignPlayerToSpawnPoint("grzegorz");
         assertFalse(spawnPointController.isThereAnyFreeSpawnPoint());
 
-        spawnPointController.addSpawnPoint(loc2);
+        spawnPointController.addSpawnPoint(loc2, "TestMap");
         assertTrue(spawnPointController.isThereAnyFreeSpawnPoint());
     }
 
@@ -66,7 +66,7 @@ public class SpawnPointControllerTest {
 
         when(loc.getLevel().getName()).thenReturn("TestWorld");
 
-        spawnPointController.addSpawnPoint(loc);
+        spawnPointController.addSpawnPoint(loc, "TestMap");
         assertTrue(spawnPointController.assignPlayerToSpawnPoint("Adam"));
     }
 

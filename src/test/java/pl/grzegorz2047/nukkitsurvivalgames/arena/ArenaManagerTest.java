@@ -38,6 +38,12 @@ public class ArenaManagerTest {
 
     @Test
     public void addSpawnPointToArena() throws Exception {
+        ArenaManager arenaManager = new ArenaManager();
+        String arenaName = "Test";
+        arenaManager.addArena(arenaName, 20, new Location(3, 5, 2));
+        boolean result = arenaManager.addSpawnPointToArena(new Location(3, 3, 3), "TestMap", arenaName);
+        assertTrue(result);
+        Arena a = arenaManager.getArenaByName("Test");
 
     }
 

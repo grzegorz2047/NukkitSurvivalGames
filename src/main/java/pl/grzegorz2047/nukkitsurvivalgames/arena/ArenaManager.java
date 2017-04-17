@@ -1,6 +1,5 @@
 package pl.grzegorz2047.nukkitsurvivalgames.arena;
 
-import cn.nukkit.Player;
 import cn.nukkit.level.Location;
 import pl.grzegorz2047.nukkitsurvivalgames.arena.exceptions.ArenaAlreadyExistsException;
 import pl.grzegorz2047.nukkitsurvivalgames.arena.exceptions.ArenaDoesntExistsException;
@@ -23,32 +22,41 @@ public class ArenaManager {
     }
 
 
-    public boolean addSpawnPointToArena(Location loc, String arenaname) {
+    public boolean addSpawnPointToArena(Location loc, String mapName, String arenaname) {
         Arena arena;
         try {
             arena = getArenaByName(arenaname.toLowerCase());
         } catch (ArenaDoesntExistsException e) {
             return false;
         }
-        arena.addSpawnPoint(loc);
+        arena.addSpawnPoint(loc, mapName);
         return true;
     }
 
     public Arena addArena(String name, int maxPlayers, Location location) throws ArenaAlreadyExistsException {
         Arena arena;
         String arenaName = name.toLowerCase();
-        try {
-            arena = getArenaByName(arenaName);
-            if (arena != null) {
-                throw new ArenaAlreadyExistsException("Arena " + arenaName + " already exists!");
-            }
-
-            System.out.println("Arena istnieje");
-        } catch (ArenaDoesntExistsException e) {
-            System.out.println("Arena nie istnieje");
-            arena = new Arena(arenaName, maxPlayers, location);
-        }
+        arena = initializeArenaIfItDoesntExist(maxPlayers, location, arenaName);
         arenas.put(arenaName, arena);
         return arena;
+    }
+
+    private Arena initializeArenaIfItDoesntExist(int maxPlayers, Location location, String arenaName) throws ArenaAlreadyExistsException {
+        Arena arena;
+        try {
+            arena = getArenaByName(arenaName);
+            throwIfArenaAlreadyExists(arena, arenaName);
+            //System.out.println("Arena istnieje");
+        } catch (ArenaDoesntExistsException e) {
+            //System.out.println("Arena nie istnieje");
+            arena = new Arena(arenaName, maxPlayers, location);
+        }
+        return arena;
+    }
+
+    private void throwIfArenaAlreadyExists(Arena arena, String arenaName) throws ArenaAlreadyExistsException {
+        if (arena != null) {
+            throw new ArenaAlreadyExistsException("Arena " + arenaName + " already exists!");
+        }
     }
 }
