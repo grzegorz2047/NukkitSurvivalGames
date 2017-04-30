@@ -13,9 +13,15 @@ import pl.grzegorz2047.nukkitsurvivalgames.commands.CommandController;
 import pl.grzegorz2047.nukkitsurvivalgames.commands.arena.ArenaCommand;
 import pl.grzegorz2047.nukkitsurvivalgames.commands.spawnpoint.SpawnPointCommand;
 import pl.grzegorz2047.nukkitsurvivalgames.filesmanaging.ConfigCreator;
+import pl.grzegorz2047.nukkitsurvivalgames.filesmanaging.SettingsFile;
 import pl.grzegorz2047.nukkitsurvivalgames.listeners.ServerCommandListener;
 import pl.grzegorz2047.nukkitsurvivalgames.spawns.SpawnPointController;
+import pl.grzegorz2047.nukkitsurvivalgames.sql.SQLManager;
+import pl.grzegorz2047.nukkitsurvivalgames.sql.mysql.MySQLEngine;
+import pl.grzegorz2047.nukkitsurvivalgames.sql.sqlite.SQLiteEngine;
 import pl.grzegorz2047.nukkitsurvivalgames.tasks.BroadcastTask;
+
+import java.sql.SQLException;
 
 /**
  * Plik stworzony przez grzegorz2047 26.03.2017.
@@ -26,6 +32,7 @@ public class SurvivalGames extends PluginBase {
     private Server server;
     private CommandController commandController;
     private ArenaManager arenaManager;
+    private SQLManager sqlManager;
 
     public static void msg(String msg) {
         Server.getInstance().getLogger().info(msg);
@@ -42,13 +49,36 @@ public class SurvivalGames extends PluginBase {
         arenaManager = new ArenaManager();
         createThreads();
         Config config = createConfig();
-        if (config.exists("welcomeMsg")) {
+        /*if (config.exists("welcomeMsg")) {
             System.out.println("DZIALA config!");
+        }*/
+        try {
+            prepareDatabase(config);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         registerEvents();
         registerCommands();
+
         msg(TextFormat.DARK_GREEN + this.getName() + " enabled!");
+    }
+
+    private void prepareDatabase(Config config) throws SQLException {
+        sqlManager = new SQLManager();
+        boolean useMysql = config.getBoolean("useMysql");
+
+        if (useMysql) {
+            String host = config.getString("sql.host");
+            int port = config.getInt("sql.port");
+            String user = config.getString("sql.user");
+            String password = config.getString("sql.password");
+            String databaseName = config.getString("sql.databaseName");
+            sqlManager.connect(new MySQLEngine(host, port, databaseName, user, password));
+        } else {
+            String databaseName = config.getString("sql.databaseName");
+            sqlManager.connect(new SQLiteEngine(databaseName));
+        }
     }
 
     private void createThreads() {

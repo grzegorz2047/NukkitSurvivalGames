@@ -3,6 +3,7 @@ package pl.grzegorz2047.nukkitsurvivalgames.filesmanaging;
 import cn.nukkit.utils.Config;
 
 import java.io.File;
+import java.util.Map;
 
 /**
  * Plik stworzony przez grzegorz2047 01.04.2017.
@@ -10,6 +11,8 @@ import java.io.File;
 public class ConfigCreator {
 
     private Config config;
+    private Map<String, Object> allEntries;
+
 
     public ConfigCreator(String path, String name, int type) {
         config = createConfig(path, name, type);
@@ -23,6 +26,7 @@ public class ConfigCreator {
         config.save();
         return config;
     }
+
 
     public Config getConfig() {
         return config;
