@@ -3,6 +3,7 @@ package pl.grzegorz2047.nukkitsurvivalgames.arena;
 import cn.nukkit.level.Location;
 import pl.grzegorz2047.nukkitsurvivalgames.arena.exceptions.ArenaAlreadyExistsException;
 import pl.grzegorz2047.nukkitsurvivalgames.arena.exceptions.ArenaDoesntExistsException;
+import pl.grzegorz2047.nukkitsurvivalgames.border.RoundBorder;
 import pl.grzegorz2047.nukkitsurvivalgames.sql.SQLEngine;
 
 import java.util.HashMap;
@@ -50,7 +51,7 @@ public class ArenaManager {
             //System.out.println("Arena istnieje");
         } catch (ArenaDoesntExistsException e) {
             //System.out.println("Arena nie istnieje");
-            arena = new Arena(arenaName, maxPlayers, location);
+            arena = new Arena(arenaName, maxPlayers, new RoundBorder(location, 20));
         }
         return arena;
     }

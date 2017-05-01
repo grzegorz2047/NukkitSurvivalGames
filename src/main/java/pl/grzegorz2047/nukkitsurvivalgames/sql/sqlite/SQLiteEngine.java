@@ -2,6 +2,7 @@ package pl.grzegorz2047.nukkitsurvivalgames.sql.sqlite;
 
 import com.zaxxer.hikari.HikariDataSource;
 import pl.grzegorz2047.nukkitsurvivalgames.sql.SQLEngine;
+import pl.grzegorz2047.nukkitsurvivalgames.sql.SQLTableCreator;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -20,12 +21,14 @@ public class SQLiteEngine implements SQLEngine {
         this.hikari = new HikariDataSource();
         this.hikari.setDataSourceClassName("org.sqlite.SQLiteDataSource");
         this.hikari.addDataSourceProperty("databaseName", this.databaseName + ".sqlite3");
+        this.hikari.setConnectionTestQuery("SELECT 1");
     }
 
+
+
     @Override
-    public void createTables() throws SQLException {
-         SQLiteTableCreator sqLiteTableCreator = new SQLiteTableCreator(hikari.getConnection());
-         sqLiteTableCreator.generateTables();
+    public void createTables(SQLTableCreator tableCreator) throws SQLException {
+        tableCreator.generateTables();
     }
 
     @Override

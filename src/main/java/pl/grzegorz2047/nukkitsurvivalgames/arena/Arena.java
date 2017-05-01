@@ -18,10 +18,10 @@ public class Arena {
     private Border border;
     private boolean enabled = false;
 
-    public Arena(String name, int maxPlayers, Location location) {
+    public Arena(String name, int maxPlayers, Border border) {
         this.arenaName = name;
         this.maxPlayers = maxPlayers;
-        this.border = new Border(location, Integer.MAX_VALUE);
+        this.border = border;
     }
 
     public void addSpawnPoint(Location loc, String mapName) {

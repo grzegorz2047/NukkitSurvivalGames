@@ -7,22 +7,8 @@ import cn.nukkit.math.MathHelper;
 /**
  * Plik stworzony przez grzegorz2047 01.04.2017.
  */
-public class Border {
+public interface Border {
+    boolean isInBounds(Location loc);
 
-    private final Location location;
-    private final int radius;
-
-    public Border(Location location, int radius) {
-        this.location = location;
-        this.radius = radius;
-
-    }
-
-    public boolean isInBounds(Location loc) {
-        return location.distance(loc) <= radius;
-    }
-
-    public Location getCenter() {
-        return location;
-    }
+    void generateBoundaries();
 }

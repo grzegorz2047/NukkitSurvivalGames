@@ -1,6 +1,7 @@
 package pl.grzegorz2047.nukkitsurvivalgames.sql.mysql;
 
 import pl.grzegorz2047.nukkitsurvivalgames.sql.SQLEngine;
+import pl.grzegorz2047.nukkitsurvivalgames.sql.SQLTableCreator;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -26,7 +27,7 @@ public class MySQLEngine implements SQLEngine {
     }
 
     @Override
-    public void createTables() throws SQLException {
+    public void createTables(SQLTableCreator tableCreator) throws SQLException {
 
     }
 

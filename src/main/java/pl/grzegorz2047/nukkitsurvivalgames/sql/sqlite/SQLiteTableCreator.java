@@ -20,25 +20,35 @@ public class SQLiteTableCreator implements SQLTableCreator {
 
     @Override
     public void generateTables() throws SQLException {
-        PreparedStatement arenaCreateStatement = connection.prepareStatement(
-                "CREATE TABLE IF NOT EXISTS arenas (" +
+        Statement statement = connection.createStatement();
+        statement.execute(
+                "CREATE TABLE IF NOT EXISTS arena (" +
                         "  arenaid INTEGER PRIMARY KEY," +
-                        "  maxPlayers INTEGER," +
-                        "  enabled INTEGER," +
-                        "  allowSpectators INTEGER," +
-                        "  borderId INTEGER," +
-                        "  FOREIGN KEY(borderId) REFERENCES borders(borderId)" +
-                        ");");
-        arenaCreateStatement.execute();
-        arenaCreateStatement.close();
-        PreparedStatement borderCreateStatement = connection.prepareStatement(
-                "CREATE TABLE IF NOT EXISTS borders (" +
-                        "  borderId INTEGER PRIMARY KEY," +
                         "  maxPlayers INTEGER," +
                         "  enabled INTEGER," +
                         "  allowSpectators INTEGER" +
                         ");");
-        borderCreateStatement.execute();
-        borderCreateStatement.close();
+
+        statement.execute(
+                "CREATE TABLE IF NOT EXISTS border (" +
+                        "  borderId INTEGER PRIMARY KEY," +
+                        "  centerX INTEGER," +
+                        "  centerY INTEGER," +
+                        "  centerZ INTEGER," +
+                        "  pos1X INTEGER," +
+                        "  pos1Y INTEGER," +
+                        "  pos1Z INTEGER," +
+                        "  pos2X INTEGER," +
+                        "  pos2Y INTEGER," +
+                        ");");
+        statement.execute(
+                "CREATE TABLE IF NOT EXISTS assignedBorderToArena (" +
+                        "  assignId INTEGER PRIMARY KEY," +
+                        "  arenaId INTEGER," +
+                        "  borderId INTEGER," +
+                        "  FOREIGN KEY(arenaId) REFERENCES arenas(arenaId)," +
+                        "  FOREIGN KEY(borderId) REFERENCES borders(borderId)" +
+                        ");");
+        statement.close();
     }
 }

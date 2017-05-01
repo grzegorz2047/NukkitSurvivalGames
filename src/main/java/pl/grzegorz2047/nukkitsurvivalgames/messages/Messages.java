@@ -12,15 +12,10 @@ import java.util.Set;
  */
 public class Messages {
 
-    private final Config config;
     private static HashMap<String, String> messages = new HashMap<>();
 
-    public Messages(Config config) {
-        this.config = config;
-        loadMessages();
-    }
-
-    private void loadMessages() {
+    public static void loadMessages(Config config) {
+        messages.clear();
         Set<Map.Entry<String, Object>> all = config.getAll().entrySet();
         for (Map.Entry<String, Object> entry : all) {
             messages.put(entry.getKey(), (String) entry.getValue());

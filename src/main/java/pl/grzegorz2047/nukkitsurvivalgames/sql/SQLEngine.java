@@ -8,7 +8,7 @@ import java.sql.SQLException;
  */
 public interface SQLEngine {
 
-    void createTables() throws SQLException;
+    void createTables(SQLTableCreator tableCreator) throws SQLException;
     Connection getConnection() throws SQLException;
     String getName();
 }

@@ -17,6 +17,7 @@ import pl.grzegorz2047.nukkitsurvivalgames.messages.Messages;
 import pl.grzegorz2047.nukkitsurvivalgames.sql.SQLManager;
 import pl.grzegorz2047.nukkitsurvivalgames.sql.mysql.MySQLEngine;
 import pl.grzegorz2047.nukkitsurvivalgames.sql.sqlite.SQLiteEngine;
+import pl.grzegorz2047.nukkitsurvivalgames.sql.sqlite.SQLiteTableCreator;
 import pl.grzegorz2047.nukkitsurvivalgames.tasks.BroadcastTask;
 
 import java.sql.SQLException;
@@ -31,7 +32,6 @@ public class SurvivalGames extends PluginBase {
     private CommandController commandController;
     private ArenaManager arenaManager;
     private SQLManager sqlManager;
-    private Messages messages;
 
     public static void msg(String msg) {
         Server.getInstance().getLogger().info(msg);
@@ -59,7 +59,7 @@ public class SurvivalGames extends PluginBase {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        messages = new Messages(messageConfig);
+        Messages.loadMessages(messageConfig);
         try {
             prepareDatabase(config);
         } catch (SQLException e) {
@@ -73,20 +73,7 @@ public class SurvivalGames extends PluginBase {
     }
 
     private void prepareDatabase(Config config) throws SQLException {
-        sqlManager = new SQLManager();
-        boolean useMysql = config.getBoolean("useMysql");
-
-        if (useMysql) {
-            String host = config.getString("sql.host");
-            int port = config.getInt("sql.port");
-            String user = config.getString("sql.user");
-            String password = config.getString("sql.password");
-            String databaseName = config.getString("sql.databaseName");
-            sqlManager.connect(new MySQLEngine(host, port, databaseName, user, password));
-        } else {
-            String databaseName = config.getString("sql.databaseName");
-            sqlManager.connect(new SQLiteEngine(databaseName));
-        }
+        sqlManager = new SQLManager(config);
     }
 
     private void createThreads() {
@@ -106,6 +93,7 @@ public class SurvivalGames extends PluginBase {
         config.save();*/
         return config;
     }
+
     private Config createMessageConfig() throws Exception {
         return new ConfigCreator(this.getDataFolder().getPath(), "messages", Config.YAML).getConfig();
     }
