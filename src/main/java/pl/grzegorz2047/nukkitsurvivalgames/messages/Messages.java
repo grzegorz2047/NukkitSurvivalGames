@@ -17,6 +17,7 @@ public class Messages {
 
     public Messages(Config config) {
         this.config = config;
+        loadMessages();
     }
 
     private void loadMessages() {

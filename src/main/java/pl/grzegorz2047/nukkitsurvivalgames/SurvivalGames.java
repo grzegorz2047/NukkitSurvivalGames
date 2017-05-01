@@ -8,14 +8,12 @@ import cn.nukkit.plugin.PluginManager;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
 import pl.grzegorz2047.nukkitsurvivalgames.arena.ArenaManager;
-import pl.grzegorz2047.nukkitsurvivalgames.commands.ChatCommand;
 import pl.grzegorz2047.nukkitsurvivalgames.commands.CommandController;
 import pl.grzegorz2047.nukkitsurvivalgames.commands.arena.ArenaCommand;
 import pl.grzegorz2047.nukkitsurvivalgames.commands.spawnpoint.SpawnPointCommand;
 import pl.grzegorz2047.nukkitsurvivalgames.filesmanaging.ConfigCreator;
-import pl.grzegorz2047.nukkitsurvivalgames.filesmanaging.SettingsFile;
 import pl.grzegorz2047.nukkitsurvivalgames.listeners.ServerCommandListener;
-import pl.grzegorz2047.nukkitsurvivalgames.spawns.SpawnPointController;
+import pl.grzegorz2047.nukkitsurvivalgames.messages.Messages;
 import pl.grzegorz2047.nukkitsurvivalgames.sql.SQLManager;
 import pl.grzegorz2047.nukkitsurvivalgames.sql.mysql.MySQLEngine;
 import pl.grzegorz2047.nukkitsurvivalgames.sql.sqlite.SQLiteEngine;
@@ -33,6 +31,7 @@ public class SurvivalGames extends PluginBase {
     private CommandController commandController;
     private ArenaManager arenaManager;
     private SQLManager sqlManager;
+    private Messages messages;
 
     public static void msg(String msg) {
         Server.getInstance().getLogger().info(msg);
@@ -48,10 +47,19 @@ public class SurvivalGames extends PluginBase {
         server = this.getServer();
         arenaManager = new ArenaManager();
         createThreads();
-        Config config = createConfig();
-        /*if (config.exists("welcomeMsg")) {
-            System.out.println("DZIALA config!");
-        }*/
+        Config config = null;
+        try {
+            config = createConfig();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Config messageConfig = null;
+        try {
+            messageConfig = createMessageConfig();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        messages = new Messages(messageConfig);
         try {
             prepareDatabase(config);
         } catch (SQLException e) {
@@ -89,13 +97,17 @@ public class SurvivalGames extends PluginBase {
         commandController = new CommandController();
         commandController.registerCommand(new SpawnPointCommand("spawnpoint", arenaManager), server.getCommandMap());
         commandController.registerCommand(new ArenaCommand("arena", arenaManager), server.getCommandMap());
+
     }
 
-    private Config createConfig() {
+    private Config createConfig() throws Exception {
         Config config = new ConfigCreator(this.getDataFolder().getPath(), "config", Config.YAML).getConfig();
-        config.set("welcomeMsg", "Hi!");
-        config.save();
+/*        config.set("welcomeMsg", "Hi!");
+        config.save();*/
         return config;
+    }
+    private Config createMessageConfig() throws Exception {
+        return new ConfigCreator(this.getDataFolder().getPath(), "messages", Config.YAML).getConfig();
     }
 
     private void registerEvents() {

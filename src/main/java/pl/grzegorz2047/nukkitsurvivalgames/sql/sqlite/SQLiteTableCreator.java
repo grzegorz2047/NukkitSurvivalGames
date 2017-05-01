@@ -22,24 +22,23 @@ public class SQLiteTableCreator implements SQLTableCreator {
     public void generateTables() throws SQLException {
         PreparedStatement arenaCreateStatement = connection.prepareStatement(
                 "CREATE TABLE IF NOT EXISTS arenas (" +
-                "  arenaid INTEGER PRIMARY KEY," +
-                "  maxPlayers INTEGER," +
-                "  enabled INTEGER," +
-                "  allowSpectators INTEGER," +
-                "  borderId INTEGER," +
-                "  FOREIGN KEY(customer_id) REFERENCES customers(id)" +
-                ");");
+                        "  arenaid INTEGER PRIMARY KEY," +
+                        "  maxPlayers INTEGER," +
+                        "  enabled INTEGER," +
+                        "  allowSpectators INTEGER," +
+                        "  borderId INTEGER," +
+                        "  FOREIGN KEY(borderId) REFERENCES borders(borderId)" +
+                        ");");
         arenaCreateStatement.execute();
-
+        arenaCreateStatement.close();
         PreparedStatement borderCreateStatement = connection.prepareStatement(
                 "CREATE TABLE IF NOT EXISTS borders (" +
-                "  arenaid INTEGER PRIMARY KEY," +
-                "  maxPlayers INTEGER," +
-                "  enabled INTEGER," +
-                "  allowSpectators INTEGER," +
-                "  borderId INTEGER," +
-                "  FOREIGN KEY(customer_id) REFERENCES customers(id)" +
-                ");");
+                        "  borderId INTEGER PRIMARY KEY," +
+                        "  maxPlayers INTEGER," +
+                        "  enabled INTEGER," +
+                        "  allowSpectators INTEGER" +
+                        ");");
         borderCreateStatement.execute();
+        borderCreateStatement.close();
     }
 }

@@ -19,16 +19,18 @@ import static org.junit.Assert.assertNotNull;
 public class ConfigCreatorTest {
 
     @Test
-    public void createConfig() throws IOException {
+    public void createConfig() throws Exception {
         File temp = File.createTempFile("config", ".yml");
-        String path = temp.getPath().replaceAll(temp.getName(), "");
-        //System.out.println("Abs path: " + path);
-        String name = temp.getName().replaceAll(".yml", "");
-        //System.out.println("Abs name: " + name);
-
-        ConfigCreator configCreator = new ConfigCreator(path, name, Config.YAML);
+        ConfigCreator configCreator = createConfigCreator(temp);
         assertNotNull(configCreator.getConfig());
         temp.delete();
     }
 
+    private ConfigCreator createConfigCreator(File temp) throws Exception {
+        String path = temp.getPath().replaceAll(temp.getName(), "");
+        //System.out.println("Abs path: " + path);
+        String name = temp.getName().replaceAll(".yml", "");
+        //System.out.println("Abs name: " + name);
+        return new ConfigCreator(path, name, Config.YAML);
+    }
 }
